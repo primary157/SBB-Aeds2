@@ -196,7 +196,30 @@ void antecessor(TNode* q, TNode** r, Boolean* fim){
     if((*r) != NULL) *fim = True;
 }
 void dirCurto(TNode** no, Boolean* fim){
-    
+    TNode *no1;
+    if((*no)->i_dir == Horizontal){
+        (*no)->i_dir = Vertical;
+        *fim = True;
+        return;
+    }
+    if((*no)->i_esq == Horizontal){
+        no1 = (*no)->esq;
+        (*no)->dir = no1->dir;
+        no1->dir = (*no);
+        (*no) = no1;
+        if((*no)->dir->esq->i_dir == Horizontal){
+            ED(&(*no)->dir); (*no)->i_dir = Horizontal;
+        }
+        else if((*no)->dir->esq->i_esq == Horizontal){
+            EE(&(*no)->dir);
+            (*no)->i_dir = Horizontal;
+        }
+        *fim = True;
+        return;
+    }
+    (*no)->i_dir = Horizontal;
+    if((*no)->esq->i_dir == Horizontal){ ED(no); *fim = True; return;}
+    if((*no)->esq->i_esq == Horizontal){ EE(no); *fim = True;}
 }
 void esqCurto(TNode** no, Boolean* fim){
     TNode *no1;
@@ -214,7 +237,7 @@ void esqCurto(TNode** no, Boolean* fim){
             DE(&(*no)->esq); (*no)->i_esq = Horizontal;
         }
         else if((*no)->esq->dir->i_dir == Horizontal){
-            DD(&(*no)->esq;
+            DD(&(*no)->esq);
             (*no)->i_esq = Horizontal;
         }
         *fim = True;
