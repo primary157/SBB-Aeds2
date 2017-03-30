@@ -147,17 +147,80 @@ void _insereNo(Aluno chave, TNode** no, TInclinacao *i_no, Boolean *fim){
 	}
 }
 void retiraNo(Aluno chave, TNode** no){
+    Boolean fim;
+    _retiraNo(chave, no, &fim);
 
 }
 void _retiraNo(Aluno chave, TNode** no, Boolean *fim){
-
+    TNode *aux;
+    if(*no == NULL){
+        printf("Chave não está na árvore\n");
+        *fim = True;
+        return;
+    }
+    if(chave.a_matricula < (*no)->chave.a_matricula){
+        _retiraNo(chave,&(*no)->esq,fim);
+        if(!*fim) esqCurto(no,fim); 
+        return;
+    }
+    if(chave.a_matricula > (*no)->chave.a_matricula){
+        _retiraNo(chave,&(*no)->dir,fim);
+        if(!*fim) dirCurto(no,fim); 
+        return;
+    }
+    *fim = False; aux = *no;
+    if(aux->dir == NULL){
+        *no = aux->esq; free(aux);
+        if(*no != NULL) *fim = True;
+        return;
+    }
+    if(aux->esq == NULL){
+        *no = aux->dir;
+        free(aux);
+        if(*no != NULL) *fim = True;
+        return;
+    }
+    antecessor(aux,&aux->esq,fim);
+    if(!*fim) esqCurto(no,fim); //Encontrou Chave
 }
 void antecessor(TNode* q, TNode** r, Boolean* fim){
-
+    if((*r)->dir != NULL){
+        antecessor(q,&(*r)->dir,fim);
+        if(!*fim) dirCurto(r,fim);
+        return;
+    }
+    q->chave = (*r)->chave;
+    q = (*r);
+    (*r) = (*r)->esq;
+    free (q);
+    if((*r) != NULL) *fim = True;
 }
-void dirCurto(TNode** no, Boolean* Fim){
-
+void dirCurto(TNode** no, Boolean* fim){
+    
 }
-void esqCurto(TNode** no, Boolean* Fim){
-
+void esqCurto(TNode** no, Boolean* fim){
+    TNode *no1;
+    if((*no)->i_esq == Horizontal){
+        (*no)->i_esq = Vertical;
+        *fim = True;
+        return;
+    }
+    if((*no)->i_dir == Horizontal){
+        no1 = (*no)->dir;
+        (*no)->dir = no1->esq;
+        no1->esq = (*no);
+        (*no) = no1;
+        if((*no)->esq->dir->i_esq == Horizontal){
+            DE(&(*no)->esq); (*no)->i_esq = Horizontal;
+        }
+        else if((*no)->esq->dir->i_dir == Horizontal){
+            DD(&(*no)->esq;
+            (*no)->i_esq = Horizontal;
+        }
+        *fim = True;
+        return;
+    }
+    (*no)->i_dir = Horizontal;
+    if((*no)->dir->i_esq == Horizontal){ DE(no); *fim = True; return;}
+    if((*no)->dir->i_dir == Horizontal){ DD(no); *fim = True;}
 }

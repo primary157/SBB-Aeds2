@@ -2,6 +2,7 @@
 #include "SBBComArquivo.h"
 int main()
 {
+    /*
 	float nota; //Variavel temporaria para segurar o valor obtido pelas funções menorNotaProva1 e maiorNotaTP
 	TNode* Arvore = leArquivo();
 	menorNotaProva1(Arvore,&nota);
@@ -14,7 +15,8 @@ int main()
 	printaArvoreOrdemComMediaProva2(Arvore);
 	printf("\n");
 	printaArvoreOrdemComMediaGeral(Arvore);
-
+    */
+    
 	
 
 	return 0;
